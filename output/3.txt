@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<ul class="container"></ul>
+
+<script>
+
+  var ul = document.querySelector('.container')
+  var users = getUsers()
+  for (let i = 0; i < users.length; i++) {
+    var li = document.createElement('li')
+
+    var div1 = document.createElement('div')
+    div1.className = 'user-name'
+    div1.innerText = users[i].name
+    var div2 = document.createElement('div')
+    div2.className = 'user-age'
+    div2.innerText = users[i].age
+    var div3 = document.createElement('div')
+    div3.className = 'user-status'
+    div3.innerText = users[i].isSingle? '单身' : '已脱单'
+
+    li.appendChild(div1)
+    li.appendChild(div2)
+    li.appendChild(div3)
+    ul.appendChild(li)
+  }
+
+</script>
+</body>
+</html>
