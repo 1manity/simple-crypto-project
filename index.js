@@ -28,8 +28,6 @@ async function encryptWithPublicKey(publicKeyPem, message) {
     } catch (e) {
         console.log(e)
     }
-
-
 }
 
 function pemToArrayBuffer(pem) {
