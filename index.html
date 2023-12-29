@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>WebSocket Client</title>
-    <link rel="stylesheet" href="index.css"></link>
+    <link rel="icon" href="./title.png" sizes="16x16">
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 <div class="bkg"></div>
@@ -18,8 +19,14 @@
 
 <div class="page-2">
     <div class="center">
-        <input type="file" id="fileInput">
-        <button id="uploadButton">上传</button>
+        <div class="page-1-title">文件加密传输</div>
+        <div class="file-upload-wrapper">
+            <input type="file" id="fileInput" class="fileInput"/>
+            <label for="fileInput" class="file-label">选择文件</label>
+            <div class="progressBar"></div>
+        </div>
+
+        <button class="secret-button" id="uploadButton"><i class="iconfont icon-bofang"></i></button>
     </div>
 </div>
 

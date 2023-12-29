@@ -1,4 +1,5 @@
 var secretButton = document.querySelector('.secret-button')
+var progressBar = document.querySelector('.progressBar')
 secretButton.addEventListener('click', async function () {
     console.log(document.querySelector('.secret-input').value)
     let message = document.querySelector('.secret-input').value;
@@ -24,7 +25,7 @@ document.getElementById('uploadButton').addEventListener('click', () => {
 
     const chunkSize = 190;
     let offset = 0;
-
+    progressBar.style.width = `0%`;
     const readNextChunk = async () => {
         const fileReader = new FileReader();
         const nextChunk = file.slice(offset, offset + chunkSize);
@@ -39,6 +40,9 @@ document.getElementById('uploadButton').addEventListener('click', () => {
                 } else {
                     console.log("所有块已发送");
                 }
+                const progressPercent = offset > file.size ? 100 : (offset / file.size) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+                console.log(progressPercent)
             } catch (error) {
                 console.error("加密过程中出现错误:", error);
             }
@@ -49,4 +53,10 @@ document.getElementById('uploadButton').addEventListener('click', () => {
     };
 
     readNextChunk();
+});
+
+document.getElementById('fileInput').addEventListener('change', function (e) {
+    document.querySelector('.file-label').innerHTML = e.target.files[0].name
+    progressBar.style.width = `0%`;
+    // 更新标签以显示文件名或执行其他操作
 });

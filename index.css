@@ -69,7 +69,7 @@ input {
 }
 
 
-.page-1 .center:hover {
+.center:hover {
 
     box-shadow: 5px 5px 10px #d2d7e1,
     -5px -5px 10px #ffffff
@@ -127,4 +127,61 @@ input {
 
 .secret-button:active {
     background: #dddddd;
+}
+
+.file-upload-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.fileInput {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.file-label {
+    display: inline-block;
+    width: 200px;
+    height: 50px;
+
+    background: #ffffff;
+    box-shadow: 0 0 3px #d9d9d9,
+    0 0 51px #ffffff;
+
+    border: none;
+    border-radius: 10px;
+    transition: 0.3s;
+
+    text-align: center;
+    line-height: 50px;
+
+    font-size: 20px;
+    font-weight: bold;
+    color: #A0ACCA;
+}
+
+.file-label:hover {
+    background: #eeeeee;
+    color: #b7c0db;
+}
+
+.file-label:active {
+    background: #dddddd;
+    color: #b7bfd0;
+}
+
+.progressBar {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    top: 0;
+    background: rgba(0, 0, 0, .3);
+    border: none;
+    border-radius: 10px;
+    transition: 0.3s;
+    pointer-events: none;
 }
