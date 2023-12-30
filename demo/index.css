@@ -1,0 +1,131 @@
+@font-face {
+    font-family: "iconfont"; /* Project id 4392615 */
+    src: url('//at.alicdn.com/t/c/font_4392615_fw7s62wg8vk.woff2?t=1703769060031') format('woff2'),
+    url('//at.alicdn.com/t/c/font_4392615_fw7s62wg8vk.woff?t=1703769060031') format('woff'),
+    url('//at.alicdn.com/t/c/font_4392615_fw7s62wg8vk.ttf?t=1703769060031') format('truetype');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-bofang:before {
+    content: "\e87c";
+}
+
+.icon-24gl-play:before {
+    content: "\ea6d";
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    outline-style: none;
+    border: 0;
+}
+
+.bkg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #ECF2FD;
+    z-index: -1;
+}
+
+.page {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-2 {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    background: #ffffff;
+    border-radius: 20px;
+
+    width: 500px;
+    height: 300px;
+    transition: 0.3s;
+}
+
+
+.center:hover {
+    box-shadow: 5px 5px 10px #d2d7e1,
+    -5px -5px 10px #ffffff
+
+}
+
+.input, .output {
+    margin: 15px;
+    display: block;
+    outline-style: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 13px 14px;
+    width: 300px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: "Microsoft soft", serif;
+}
+
+.input:hover {
+    border: 1px solid #888;
+}
+
+.input:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+}
+
+.title {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 20px auto;
+}
+
+.button {
+    margin: 20px;
+
+
+    width: 50px;
+    height: 50px;
+
+    background: #ffffff;
+    box-shadow: 0 0 15px #d9d9d9,
+    0 0 51px #ffffff;
+
+    border: none;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.button:hover {
+    background: #eeeeee;
+}
+
+.button:active {
+    background: #dddddd;
+}
+
