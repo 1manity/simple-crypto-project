@@ -9,7 +9,11 @@ secretButton.addEventListener('click', async function () {
 
     console.log(encryptedMessage)
     // 创建JSON对象
-    let dataToSend = JSON.stringify({type: '01', encryptedMessage});
+    let dataToSend = JSON.stringify({
+        type: '01',
+        data: encryptedMessage,
+        sign: MD5(encryptedMessage, 'salt1manityobbly')
+    });
 
     // 发送加密后的消息到服务器
     socket.send(dataToSend);
@@ -23,7 +27,7 @@ document.getElementById('uploadButton').addEventListener('click', () => {
         return;
     }
 
-    socket.send(JSON.stringify({type: '02', name: file.name}));
+    socket.send(JSON.stringify({type: '02', data: file.name, sign: MD5(file.name, 'salt1manityobbly')}));
 
     const chunkSize = 190;
     let offset = 0;
@@ -35,7 +39,11 @@ document.getElementById('uploadButton').addEventListener('click', () => {
             const fileContent = e.target.result;
             try {
                 const encryptedContent = await encryptWithPublicKey(sharedKey, fileContent);
-                socket.send(JSON.stringify({type: '03', chunk: encryptedContent}));
+                socket.send(JSON.stringify({
+                    type: '03',
+                    data: encryptedContent,
+                    sign: MD5(encryptedContent, 'salt1manityobbly')
+                }));
                 offset += chunkSize;
                 if (offset < file.size) {
                     await readNextChunk();

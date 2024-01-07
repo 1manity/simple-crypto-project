@@ -1,4 +1,5 @@
 import base64
+import hashlib
 import json
 
 from cryptography.hazmat.backends import default_backend
@@ -9,6 +10,8 @@ from cryptography.hazmat.primitives import hashes
 
 import asyncio
 import websockets
+
+SALT = 'salt1manityobbly'
 
 # 生成密钥对
 private_key = rsa.generate_private_key(
@@ -32,6 +35,17 @@ private_key_pem = private_key.private_bytes(
 )
 
 
+def md5_hash(data):
+    # 创建MD5哈希对象
+    hash_object = hashlib.md5()
+
+    # 更新哈希对象的数据
+    hash_object.update(data.encode('utf-8'))
+
+    # 获取哈希结果的十六进制表示
+    return hash_object.hexdigest()
+
+
 async def handle_client(websocket, path):
     # 发送公钥给客户端
     decrypted_message = ''
@@ -44,9 +58,10 @@ async def handle_client(websocket, path):
             encrypted_message = await websocket.recv()
             print(encrypted_message)
             data = json.loads(encrypted_message)
-
+            if md5_hash(data['data'] + SALT) != data['sign']:
+                raise ValueError('消息验证失败')
             if data["type"] == "01":
-                encrypted_message_base64 = data["encryptedMessage"]
+                encrypted_message_base64 = data["data"]
                 encrypted_message_bytes = base64.b64decode(encrypted_message_base64)
 
                 print(f"收到加密消息: {encrypted_message_bytes}")
@@ -65,7 +80,7 @@ async def handle_client(websocket, path):
                     print(f"解密失败: {e}")
 
             elif data["type"] == "02":
-                name = data["name"]
+                name = data["data"]
 
                 # 解密消息
                 try:
@@ -80,7 +95,7 @@ async def handle_client(websocket, path):
                     print(f"创建文件失败: {e}")
 
             elif data["type"] == "03":
-                encrypted_message_base64 = data["chunk"]
+                encrypted_message_base64 = data["data"]
 
                 encrypted_message_bytes = base64.b64decode(encrypted_message_base64)
 
@@ -103,7 +118,7 @@ async def handle_client(websocket, path):
                     print(f"解密失败: {e}")
 
             elif data["type"] == "00":
-                public_key_client = data["publicKey"]
+                public_key_client = data["data"]
                 server_public_key = public_key_pem.decode('utf-8')
 
                 # 以空格为界分割字符串
@@ -114,8 +129,9 @@ async def handle_client(websocket, path):
 
                 # 动态构造JSON对象
                 encrypted_json_dict = {f"part{i + 1}": encrypted_parts[i] for i in range(len(encrypted_parts))}
+                encrypted_json_dict['sign'] = md5_hash(server_public_key + SALT)
                 encrypted_json = json.dumps(encrypted_json_dict)
-                print(type(encrypted_json))
+                print((encrypted_json))
                 # 发送JSON对象
                 await websocket.send(encrypted_json)
             else:

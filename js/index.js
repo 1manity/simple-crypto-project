@@ -6,7 +6,7 @@ socket.onopen = async function (e) {
 
     let publicKeyPem = await generateKeyPair();
     console.log("连接服务器成功，发送公钥...", publicKeyPem);
-    socket.send(JSON.stringify({type: '00', publicKey: publicKeyPem, sign: MD5(publicKeyPem, '1manity')})); // 发送公钥到服务器
+    socket.send(JSON.stringify({type: '00', data: publicKeyPem, sign: MD5(publicKeyPem, 'salt1manityobbly')})); // 发送公钥到服务器
 };
 
 socket.onmessage = async function (event) {
@@ -21,7 +21,10 @@ socket.onmessage = async function (event) {
     }
 
     sharedKey = decryptedKeyParts.join('\n')
-
+    if (MD5(sharedKey, 'salt1manityobbly') !== encryptedData['sign']) {
+        console.log('签名验证错误')
+        return
+    }
     // sharedKey = event.data
     console.log(sharedKey)
 
