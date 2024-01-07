@@ -35,8 +35,8 @@ private_key_pem = private_key.private_bytes(
 async def handle_client(websocket, path):
     # 发送公钥给客户端
     decrypted_message = ''
-    await websocket.send(public_key_pem.decode('utf-8'))
-    print("公钥已发送至客户端。")
+    # await websocket.send(public_key_pem.decode('utf-8'))
+    # print("公钥已发送至客户端。")
     output_file_name = ''
     try:
         while True:  # 持续监听
@@ -99,15 +99,69 @@ async def handle_client(websocket, path):
                     with open(output_file_name, 'ab+') as file:
                         file.write(decrypted_message)
                     print(f"导入文件成功")
-
                 except Exception as e:
                     print(f"解密失败: {e}")
+
+            elif data["type"] == "00":
+                public_key_client = data["publicKey"]
+                server_public_key = public_key_pem.decode('utf-8')
+
+                # 以空格为界分割字符串
+                parts = server_public_key.split('\n')
+
+                # 加密每部分
+                encrypted_parts = [encrypt_message(part, public_key_client) for part in parts]
+
+                # 动态构造JSON对象
+                encrypted_json_dict = {f"part{i + 1}": encrypted_parts[i] for i in range(len(encrypted_parts))}
+                encrypted_json = json.dumps(encrypted_json_dict)
+                print(type(encrypted_json))
+                # 发送JSON对象
+                await websocket.send(encrypted_json)
+            else:
+                raise TypeError(f"不能被识别的type值")
 
     except websockets.exceptions.ConnectionClosed as e:
         print(f"连接关闭: {e}")
 
     except Exception as e:
         print(f"发生错误: {e}")
+
+
+def decrypt_message(encrypted_message_base64, private_key):
+    try:
+        encrypted_message_bytes = base64.b64decode(encrypted_message_base64)
+        decrypted_message = private_key.decrypt(
+            encrypted_message_bytes,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+        return decrypted_message.decode('utf-8')
+    except Exception as e:
+        print(f"解密失败: {e}")
+        return None
+
+
+def encrypt_message(message, public_key_pem):
+    public_key = serialization.load_pem_public_key(
+        public_key_pem.encode(),
+        backend=default_backend()
+    )
+
+    encrypted_message = public_key.encrypt(
+        message.encode(),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+
+    encrypted_message_base64 = base64.b64encode(encrypted_message).decode('utf-8')
+    return encrypted_message_base64
 
 
 # 启动WebSocket服务器

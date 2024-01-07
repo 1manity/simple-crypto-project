@@ -64,7 +64,7 @@ input {
     border-radius: 20px;
 
     width: 500px;
-    height: 300px;
+    height: 400px;
     transition: 0.3s;
 }
 
@@ -75,8 +75,21 @@ input {
 
 }
 
-.input, .output {
-    margin: 15px;
+.container {
+    display: flex;
+
+}
+
+.container span {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+.input, .output, .e, .d, .n {
+    margin: 5px;
     display: block;
     outline-style: none;
     border: 1px solid #ccc;

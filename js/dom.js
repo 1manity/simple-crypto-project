@@ -1,9 +1,11 @@
 var secretButton = document.querySelector('.secret-button')
 var progressBar = document.querySelector('.progressBar')
+
+
 secretButton.addEventListener('click', async function () {
     console.log(document.querySelector('.secret-input').value)
     let message = document.querySelector('.secret-input').value;
-    let encryptedMessage = await encryptWithPublicKey(publicKey, message);
+    let encryptedMessage = await encryptWithPublicKey(sharedKey, message);
 
     console.log(encryptedMessage)
     // 创建JSON对象
@@ -32,7 +34,7 @@ document.getElementById('uploadButton').addEventListener('click', () => {
         fileReader.onload = async (e) => {
             const fileContent = e.target.result;
             try {
-                const encryptedContent = await encryptWithPublicKey(publicKey, fileContent);
+                const encryptedContent = await encryptWithPublicKey(sharedKey, fileContent);
                 socket.send(JSON.stringify({type: '03', chunk: encryptedContent}));
                 offset += chunkSize;
                 if (offset < file.size) {

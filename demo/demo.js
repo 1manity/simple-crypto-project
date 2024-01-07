@@ -65,12 +65,11 @@ function generateLargePrime(length) {
     let primeCandidate;
 
     while (!foundPrime) {
-        // 生成一个随机的大整数
         let randomNumber = '';
         for (let i = 0; i < length; i++) {
             randomNumber += Math.floor(Math.random() * 10).toString();
         }
-        primeCandidate = BigInt(randomNumber) | BigInt(1); // 确保是奇数
+        primeCandidate = BigInt(randomNumber) | BigInt(1);
 
         if (isProbablePrime(primeCandidate)) foundPrime = true;
     }
@@ -104,9 +103,9 @@ function rsaDecrypt(c, d, n) {
 function stringToBigInt(str) {
     let result = '';
     for (let i = 0; i < str.length; i++) {
-        // 获取每个字符的字符代码
+
         let code = str.charCodeAt(i).toString();
-        // 如果需要，可以在前面填充零以保持固定长度
+
         while (code.length < 6) {
             code = '0' + code;
         }
@@ -130,7 +129,7 @@ function bigIntToString(bigInt) {
     return result;
 }
 
-// 生成素数 p 和 q
+
 let p = generateLargePrime(155);
 let q = generateLargePrime(155);
 while (q === p) {
@@ -141,7 +140,7 @@ let n = p * q;
 let phi = (p - BigInt(1)) * (q - BigInt(1));
 
 // 选择 e
-let e = BigInt(3);
+let e = generateLargePrime(155);
 while (gcd(phi, e) !== BigInt(1)) {
     e++;
 }
@@ -163,6 +162,6 @@ function encrypt(message) {
     return rsaEncrypt(BigInt(stringToBigInt(message)), e, n);
 }
 
-function decrypt(encrypted) {
+function decrypt(encrypted, d, n) {
     return bigIntToString(rsaDecrypt(encrypted, d, n));
 }
